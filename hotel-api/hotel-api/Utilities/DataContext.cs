@@ -19,5 +19,9 @@
         }
 
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Facility> Facilities { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<User> users { get; set; }
     }
 }
