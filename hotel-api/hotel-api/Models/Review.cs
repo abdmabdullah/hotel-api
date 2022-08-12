@@ -6,6 +6,7 @@
         public string ReviewerName { get; set; }
         public string ReviewBody { get; set; }
         public int Stars { get; set; }
-        public ICollection<Hotel> Hotels { get; set; }
+        public int HotelId { get; set; }
+        public Hotel Hotel { get; set; }
     }
 }

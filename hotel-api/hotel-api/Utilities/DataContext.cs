@@ -14,14 +14,28 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // connect to postgres with connection string from app settings
             options.UseNpgsql(Configuration.GetConnectionString("HotelDatabase"));
         }
-
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<User> Users { get; set; }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Hotel>()
+                .HasMany(h => h.Facilities)
+                .WithMany(h => h.Hotels)
+                .UsingEntity<FacilityHotel>(
+                x => x
+                    .HasOne(f => f.Facility)
+                    .WithMany(h => h.FacilityHotels)
+                    .HasForeignKey(f => f.FacilityId),
+                j => j
+                    .HasOne(h => h.Hotel)
+                    .WithMany(f => f.FacilityHotels)
+                    .HasForeignKey(h => h.Hotel.Id));
+        }
     }
 }

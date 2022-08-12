@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public ICollection<Hotel> Hotels { get; set; }
+        public List<FacilityHotel> FacilityHotels { get; set; }
     }
 }

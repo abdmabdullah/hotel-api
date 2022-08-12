@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using hotel_api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotel_api.Controllers
 {
     public class HotelController : Controller
     {
+
+        public async Task<IActionResult> AddHotel(Hotel hotel, List<Facility> facilities)
+        {
+
+            return Ok();
+        }
         // GET: HotelController
         public ActionResult Index()
         {

@@ -10,5 +10,6 @@
         public int Capacity { get; set; }
         public ICollection<Facility> Facilities { get; set; } 
         public ICollection<Review> Reviews { get; set; }
+        public List<FacilityHotel> FacilityHotels { get; set; }
     }
 }
