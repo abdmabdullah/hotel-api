@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hotel_api.Utilities;
@@ -11,9 +12,10 @@ using hotel_api.Utilities;
 namespace hotel_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220812103514_RelationshipsUpdate")]
+    partial class RelationshipsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +89,21 @@ namespace hotel_api.Migrations
                     b.ToTable("Facilities");
                 });
 
+            modelBuilder.Entity("hotel_api.Models.FacilityHotel", b =>
+                {
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HotelId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FacilityId", "HotelId");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("FacilityHotels");
+                });
+
             modelBuilder.Entity("hotel_api.Models.Hotel", b =>
                 {
                     b.Property<int>("Id")
@@ -116,21 +133,6 @@ namespace hotel_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hotels");
-                });
-
-            modelBuilder.Entity("hotel_api.Models.HotelFacility", b =>
-                {
-                    b.Property<int>("FacilityId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HotelId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("FacilityId", "HotelId");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("HotelFacilities");
                 });
 
             modelBuilder.Entity("hotel_api.Models.Review", b =>
@@ -219,7 +221,7 @@ namespace hotel_api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("hotel_api.Models.HotelFacility", b =>
+            modelBuilder.Entity("hotel_api.Models.FacilityHotel", b =>
                 {
                     b.HasOne("hotel_api.Models.Facility", "Facility")
                         .WithMany("FacilityHotels")

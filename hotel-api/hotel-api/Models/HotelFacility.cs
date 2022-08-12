@@ -1,10 +1,10 @@
 ﻿namespace hotel_api.Models
 {
-    public class FacilityHotel
+    public class HotelFacility
     {
-        public int FacilityId { get; set; }
-        public Facility Facility { get; set; }
         public int HotelId { get; set; }
         public Hotel Hotel { get; set; }
+        public int FacilityId { get; set; }
+        public Facility Facility { get; set; }
     }
 }

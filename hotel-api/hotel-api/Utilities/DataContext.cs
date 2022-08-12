@@ -21,21 +21,11 @@
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<HotelFacility> HotelFacilities { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Hotel>()
-                .HasMany(h => h.Facilities)
-                .WithMany(h => h.Hotels)
-                .UsingEntity<FacilityHotel>(
-                x => x
-                    .HasOne(f => f.Facility)
-                    .WithMany(h => h.FacilityHotels)
-                    .HasForeignKey(f => f.FacilityId),
-                j => j
-                    .HasOne(h => h.Hotel)
-                    .WithMany(f => f.FacilityHotels)
-                    .HasForeignKey(h => h.Hotel.Id));
+            modelBuilder.Entity<HotelFacility>().HasKey(fh => new { fh.FacilityId, fh.HotelId });
         }
     }
 }
