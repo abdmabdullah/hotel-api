@@ -46,12 +46,36 @@ namespace hotel_api.Repository.RepositoryConcrete
             return _dbContext.Hotels.ToList();
         }
 
-        public Hotel GetHotelById(int id)
+        public HotelDetailsApiModel GetHotelById(int id)
         {
             Hotel hotel = _dbContext.Hotels.Find(id);
             if (hotel == null)
                 throw new KeyNotFoundException("Hotel not found");
-            return hotel;
+            HotelDetailsApiModel hotelDetails = new HotelDetailsApiModel
+            {
+                Id = hotel.Id,
+                Name = hotel.Name,
+                Address = hotel.Address,
+                Description = hotel.Description,
+                RatePerNight = hotel.RatePerNight,
+                Capacity = hotel.Capacity,
+                Reviews = _dbContext.Reviews.Where(x => x.HotelId == id)
+                    .Select(x => new ReviewDetails
+                    {
+                        Id = x.Id,
+                        ReviewerName = x.ReviewerName,
+                        ReviewBody = x.ReviewBody,
+                        Stars = x.Stars
+                    }).ToList(),
+                Facilities = _dbContext.Facilities.Where(x => x.Hotels.Any(x => x.Id.Equals(id)))
+                    .Select(x => new FacilityApiModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description
+                    }).ToList()
+            };
+            return hotelDetails;
         }
 
         public void UpdateHotel(Hotel hotel)

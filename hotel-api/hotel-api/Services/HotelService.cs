@@ -31,7 +31,7 @@ namespace hotel_api.Services
         {
             try
             {
-                Hotel hotel = _hotelRepository.GetHotelById(id);
+                HotelDetailsApiModel hotel = _hotelRepository.GetHotelById(id);
                 return new ResponseModel(hotel, Constants.SUCCESS_MESSAGE, Constants.SUCCESS_CODE);
             }
             catch (KeyNotFoundException)

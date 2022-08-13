@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace hotel_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class Hotels : ControllerBase
     {
@@ -17,28 +17,25 @@ namespace hotel_api.Controllers
         }
 
         [HttpGet]
-        [Route("/[action]")]
         public ResponseModel GetHotels()
         {
             return _hotelService.GetHotels();
         }
 
         [HttpGet]
-        [Route("/[action]/{id}")]
+        [Route("{id}")]
         public ResponseModel GetHotel(int id)
         {
             return _hotelService.GetHotel(id);
         }
 
         [HttpPost]
-        [Route("/[action]")]
         public async Task<ResponseModel> AddHotel(HotelApiModel hotel)
         {
             return _hotelService.AddHotel(hotel);
         }
 
         [HttpPost]
-        [Route("/[action]")]
         public ResponseModel UpdateHotel(Hotel hotel)
         {
             return _hotelService.UpdateHotel(hotel);
