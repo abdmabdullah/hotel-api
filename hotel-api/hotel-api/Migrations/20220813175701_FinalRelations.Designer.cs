@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hotel_api.Utilities;
@@ -11,9 +12,10 @@ using hotel_api.Utilities;
 namespace hotel_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220813175701_FinalRelations")]
+    partial class FinalRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +37,37 @@ namespace hotel_api.Migrations
                     b.HasIndex("HotelsId");
 
                     b.ToTable("FacilityHotel");
+                });
+
+            modelBuilder.Entity("hotel_api.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HotelId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("HotelId")
+                        .IsUnique();
+
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("hotel_api.Models.Booking", b =>
@@ -66,6 +99,45 @@ namespace hotel_api.Migrations
                     b.ToTable("Bookings");
                 });
 
+            modelBuilder.Entity("hotel_api.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("hotel_api.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
+                });
+
             modelBuilder.Entity("hotel_api.Models.Facility", b =>
                 {
                     b.Property<int>("Id")
@@ -94,10 +166,6 @@ namespace hotel_api.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("Capacity")
                         .HasColumnType("integer");
@@ -187,6 +255,25 @@ namespace hotel_api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("hotel_api.Models.Address", b =>
+                {
+                    b.HasOne("hotel_api.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hotel_api.Models.Hotel", "Hotel")
+                        .WithOne("Address")
+                        .HasForeignKey("hotel_api.Models.Address", "HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Hotel");
+                });
+
             modelBuilder.Entity("hotel_api.Models.Booking", b =>
                 {
                     b.HasOne("hotel_api.Models.Hotel", "Hotel")
@@ -204,6 +291,17 @@ namespace hotel_api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("hotel_api.Models.City", b =>
+                {
+                    b.HasOne("hotel_api.Models.Country", "Country")
+                        .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("hotel_api.Models.Review", b =>
                 {
                     b.HasOne("hotel_api.Models.Hotel", "Hotel")
@@ -215,8 +313,16 @@ namespace hotel_api.Migrations
                     b.Navigation("Hotel");
                 });
 
+            modelBuilder.Entity("hotel_api.Models.Country", b =>
+                {
+                    b.Navigation("Cities");
+                });
+
             modelBuilder.Entity("hotel_api.Models.Hotel", b =>
                 {
+                    b.Navigation("Address")
+                        .IsRequired();
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

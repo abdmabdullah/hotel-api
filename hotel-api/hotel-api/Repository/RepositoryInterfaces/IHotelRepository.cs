@@ -1,4 +1,5 @@
-﻿using hotel_api.Models;
+﻿using hotel_api.ApiModels;
+using hotel_api.Models;
 
 namespace hotel_api.Repository.RepositoryInterfaces
 {
@@ -6,8 +7,9 @@ namespace hotel_api.Repository.RepositoryInterfaces
     {
         IEnumerable<Hotel> GetAllHotels();
         Hotel GetHotelById(int id);
-        void AddHotel(Hotel hotel);
+        int AddHotel(HotelApiModel hotel);
         void UpdateHotel(Hotel hotel);
         void DeleteHotel(Hotel hotel);
+        void Save();
     }
 }

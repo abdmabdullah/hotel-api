@@ -38,7 +38,7 @@ namespace hotel_api.Repository.RepositoryConcrete
 
         public IEnumerable<Facility> GetFacilitiesByHotelId(int hotelId)
         {
-            IEnumerable<Facility> facilities = _dbContext.Facilities.Where(x => x.FacilityHotels.Where(y => y.HotelId == hotelId).Any());
+            IEnumerable<Facility> facilities = _dbContext.Facilities.Include(x => x.Hotels.Where(y => y.Id == hotelId).ToList());
             if (facilities == null)
                 throw new KeyNotFoundException("No facilities found");
             return facilities;

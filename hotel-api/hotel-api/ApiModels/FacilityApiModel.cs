@@ -1,10 +1,12 @@
-﻿namespace hotel_api.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace hotel_api.ApiModels
 {
-    public class Facility
+    public class FacilityApiModel
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<Hotel> Hotels { get; set; }   
     }
 }

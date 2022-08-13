@@ -1,4 +1,5 @@
-﻿using hotel_api.Models;
+﻿using hotel_api.ApiModels;
+using hotel_api.Models;
 using hotel_api.Repository.RepositoryInterfaces;
 using hotel_api.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,21 @@ namespace hotel_api.Repository.RepositoryConcrete
             _dbContext = context;
         }
 
-        public void AddHotel(Hotel hotel)
+        public int AddHotel(HotelApiModel hotel)
         {
-            _dbContext.Hotels.Add(hotel);
+            var newHotel = new Hotel
+            {
+                Name = hotel.Name,
+                Description = hotel.Description,
+                RatePerNight = hotel.RatePerNight,
+                Capacity = hotel.Capacity,
+                Address = hotel.Address,
+                Facilities = _dbContext.Facilities.Where(x => hotel.FacilityIds.Any(y => y.Equals(x.Id))).ToList()
+            };
+            
+            _dbContext.Hotels.Add(newHotel);
+            Save();
+            return newHotel.Id;
         }
 
         public void DeleteHotel(Hotel hotel)

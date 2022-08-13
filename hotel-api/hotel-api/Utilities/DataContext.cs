@@ -21,11 +21,5 @@
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<HotelFacility> HotelFacilities { get; set; }
-        
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<HotelFacility>().HasKey(fh => new { fh.FacilityId, fh.HotelId });
-        }
     }
 }

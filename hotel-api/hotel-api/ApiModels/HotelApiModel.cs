@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace hotel_api.Models
+namespace hotel_api.ApiModels
 {
-    public class Hotel
+    public class HotelApiModel
     {
         public int Id { get; set; }
         [Required]
@@ -16,7 +15,7 @@ namespace hotel_api.Models
         public decimal RatePerNight { get; set; }
         [Required]
         public int Capacity { get; set; }
-        public virtual ICollection<Review>? Reviews { get; set; }
-        public virtual ICollection<Facility>? Facilities { get; set; }
+        [Required]
+        public List<int> FacilityIds { get; set; }
     }
 }
