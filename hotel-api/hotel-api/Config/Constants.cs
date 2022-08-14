@@ -13,5 +13,14 @@
 
         public static readonly string FAILURE_MESSAGE = "An error occurred. Please try again later";
         public static readonly int FAILURE_CODE = 999;
+
+        public static readonly string INVALID_HOTEL_ID_MESSAGE = "The selected Hotel Id is invalid";
+        public static readonly int INVALID_HOTEL_ID_CODE = 422;
+
+        public static readonly string INVALID_USER_MESSAGE = "The selected user is invalid";
+        public static readonly int INVALID_USER_CODE = 422;
+
+        public static readonly string HOTEL_NOT_AVAILABLE_MESSAGE = "This hotel is not available for booking in this date range";
+        public static readonly int HOTEL_NOT_AVAILABLE_CODE = 422; 
     }
 }

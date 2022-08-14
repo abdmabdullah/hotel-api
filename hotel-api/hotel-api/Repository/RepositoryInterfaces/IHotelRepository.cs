@@ -10,6 +10,7 @@ namespace hotel_api.Repository.RepositoryInterfaces
         int AddHotel(HotelApiModel hotel);
         void UpdateHotel(Hotel hotel);
         void DeleteHotel(Hotel hotel);
+        bool IsHotelAvailable(int hotelId, DateTime checkInDate, DateTime checkOutDate);
         void Save();
     }
 }

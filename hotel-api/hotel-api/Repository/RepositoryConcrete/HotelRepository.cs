@@ -25,7 +25,7 @@ namespace hotel_api.Repository.RepositoryConcrete
                 Address = hotel.Address,
                 Facilities = _dbContext.Facilities.Where(x => hotel.FacilityIds.Any(y => y.Equals(x.Id))).ToList()
             };
-            
+
             _dbContext.Hotels.Add(newHotel);
             Save();
             return newHotel.Id;
@@ -75,6 +75,11 @@ namespace hotel_api.Repository.RepositoryConcrete
                         Description = x.Description
                     }).ToList()
             };
+            hotelDetails.RatingStats = new RatingStats
+            {
+                ReviewsCount = hotelDetails.Reviews.Count(),
+                Rating = hotelDetails.Reviews.Count > 0 ? hotelDetails.Reviews.Average(x => x.Stars) : 0
+            };
             return hotelDetails;
         }
 
@@ -85,6 +90,15 @@ namespace hotel_api.Repository.RepositoryConcrete
         public void Save()
         {
             _dbContext.SaveChanges();
+        }
+
+        public bool IsHotelAvailable(int hotelId, DateTime checkInDate, DateTime checkOutDate)
+        {
+            return _dbContext.Bookings.Where(x => x.HotelId == hotelId
+                                    && (x.StartDate > checkInDate && x.EndDate < checkOutDate)
+                                    || (x.StartDate < checkInDate && x.EndDate < checkOutDate)
+                                    || (x.StartDate > checkInDate && x.StartDate < checkOutDate && x.EndDate > checkOutDate)
+                                    || (x.StartDate < checkInDate && x.EndDate > checkOutDate)).Count() < 1;
         }
     }
 }

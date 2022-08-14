@@ -18,5 +18,6 @@ namespace hotel_api.Models
         public int Capacity { get; set; }
         public virtual ICollection<Review>? Reviews { get; set; }
         public virtual ICollection<Facility>? Facilities { get; set; }
+        public virtual ICollection<Booking>? Bookings { get; set; }
     }
 }

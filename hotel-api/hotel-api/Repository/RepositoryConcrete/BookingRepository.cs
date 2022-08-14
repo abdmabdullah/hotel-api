@@ -1,4 +1,5 @@
-﻿using hotel_api.Models;
+﻿using hotel_api.ApiModels;
+using hotel_api.Models;
 using hotel_api.Repository.RepositoryInterfaces;
 using hotel_api.Utilities;
 
@@ -11,9 +12,18 @@ namespace hotel_api.Repository.RepositoryConcrete
         {
             _dbContext = context;
         }
-        public void AddBooking(Booking booking)
+        public int AddBooking(BookingApiModel booking)
         {
-            _dbContext.Bookings.Add(booking);
+            Booking newBooking = new Booking
+            {
+                HotelId = booking.HotelId,
+                StartDate = booking.StartDate,
+                EndDate = booking.EndDate,
+                UserId = booking.UserId
+            };
+            _dbContext.Bookings.Add(newBooking);
+            Save();
+            return newBooking.Id;
         }
 
         public void Dispose()

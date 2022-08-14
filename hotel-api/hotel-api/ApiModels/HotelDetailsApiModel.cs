@@ -19,5 +19,6 @@ namespace hotel_api.ApiModels
         public int Capacity { get; set; }
         public List<ReviewDetails>? Reviews { get; set; }
         public List<FacilityApiModel>? Facilities { get; set; }
+        public RatingStats RatingStats { get; set; }
     }
 }

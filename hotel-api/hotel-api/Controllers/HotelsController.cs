@@ -8,10 +8,10 @@ namespace hotel_api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class Hotels : ControllerBase
+    public class HotelsController : ControllerBase
     {
         private HotelService _hotelService;
-        public Hotels(HotelService hotelService)
+        public HotelsController(HotelService hotelService)
         {
             _hotelService = hotelService;
         }
@@ -30,7 +30,7 @@ namespace hotel_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseModel> AddHotel(HotelApiModel hotel)
+        public ResponseModel AddHotel(HotelApiModel hotel)
         {
             return _hotelService.AddHotel(hotel);
         }
