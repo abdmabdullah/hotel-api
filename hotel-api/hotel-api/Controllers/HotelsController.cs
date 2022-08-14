@@ -22,6 +22,11 @@ namespace hotel_api.Controllers
             return _hotelService.GetHotels();
         }
 
+        [HttpPost]
+        public ResponseModel SearchHotels([FromBody]HotelSearchApiModel query)
+        {
+            return _hotelService.SearchHotels(query);
+        }
         [HttpGet]
         [Route("{id}")]
         public ResponseModel GetHotel(int id)

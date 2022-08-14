@@ -1,4 +1,5 @@
 ﻿using hotel_api.ApiModels;
+using hotel_api.Config;
 using hotel_api.Models;
 using hotel_api.Repository.RepositoryInterfaces;
 using hotel_api.Utilities;
@@ -99,6 +100,68 @@ namespace hotel_api.Repository.RepositoryConcrete
                                     || (x.StartDate < checkInDate && x.EndDate < checkOutDate)
                                     || (x.StartDate > checkInDate && x.StartDate < checkOutDate && x.EndDate > checkOutDate)
                                     || (x.StartDate < checkInDate && x.EndDate > checkOutDate)).Count() < 1;
+        }
+
+        public List<HotelDetailsApiModel> SearchHotels(HotelSearchApiModel query)
+        {
+            ICollection<Hotel> hotels;
+            if(query.FilterTypeId == null)
+            {
+                hotels = _dbContext.Hotels.Where(x => x.SearchVector.Matches(query.SearchQuery)).ToList();
+            }
+            else
+            {
+                var filterName = _dbContext.FilterTypes.Where(x => x.Id == query.FilterTypeId).Select(x => new { x.Name });
+                if (string.IsNullOrEmpty(filterName.ToString()))
+                    throw new InvalidDataException(Constants.INVALID_FILTER_ID_MESSAGE);
+
+                System.Reflection.PropertyInfo prop = typeof(FilterType).GetProperty(filterName.ToString());
+                hotels = _dbContext.Hotels.Where(x => x.SearchVector.Matches(query.SearchQuery)
+                                                                    && prop.GetValue(x) == query.FilterValue).ToList();
+            }
+            if(hotels == null || hotels.Count < 1)
+                throw new KeyNotFoundException();
+            return GetHotelDetailsFromHotels(hotels);
+        }
+
+        private List<HotelDetailsApiModel> GetHotelDetailsFromHotels(ICollection<Hotel> hotels)
+        {
+            List<HotelDetailsApiModel> hotelDetails = new List<HotelDetailsApiModel>();
+            HotelDetailsApiModel hotelDetailsApiModel;
+            foreach(Hotel hotel in hotels)
+            {
+                hotelDetailsApiModel = new HotelDetailsApiModel
+                {
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Address = hotel.Address,
+                    Description = hotel.Description,
+                    RatePerNight = hotel.RatePerNight,
+                    Capacity = hotel.Capacity,
+                    Reviews = _dbContext.Reviews.Where(x => x.HotelId == hotel.Id)
+                   .Select(x => new ReviewDetails
+                   {
+                       Id = x.Id,
+                       ReviewerName = x.ReviewerName,
+                       ReviewBody = x.ReviewBody,
+                       Stars = x.Stars
+                   }).ToList(),
+                    Facilities = _dbContext.Facilities.Where(x => x.Hotels.Any(x => x.Id.Equals(hotel.Id)))
+                   .Select(x => new FacilityApiModel
+                   {
+                       Id = x.Id,
+                       Name = x.Name,
+                       Description = x.Description
+                   }).ToList()
+                };
+                hotelDetailsApiModel.RatingStats = new RatingStats
+                {
+                    ReviewsCount = hotelDetailsApiModel.Reviews.Count(),
+                    Rating = hotelDetailsApiModel.Reviews.Count > 0 ? hotelDetailsApiModel.Reviews.Average(x => x.Stars) : 0
+                };
+                hotelDetails.Add(hotelDetailsApiModel);
+            }
+            return hotelDetails;
         }
     }
 }

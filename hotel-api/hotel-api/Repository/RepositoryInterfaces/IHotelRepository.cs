@@ -11,6 +11,7 @@ namespace hotel_api.Repository.RepositoryInterfaces
         void UpdateHotel(Hotel hotel);
         void DeleteHotel(Hotel hotel);
         bool IsHotelAvailable(int hotelId, DateTime checkInDate, DateTime checkOutDate);
+        List<HotelDetailsApiModel> SearchHotels(HotelSearchApiModel query);
         void Save();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NpgsqlTypes;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace hotel_api.Models
@@ -19,5 +20,7 @@ namespace hotel_api.Models
         public virtual ICollection<Review>? Reviews { get; set; }
         public virtual ICollection<Facility>? Facilities { get; set; }
         public virtual ICollection<Booking>? Bookings { get; set; }
+        [JsonIgnore]
+        public NpgsqlTsVector SearchVector { get; set; }
     }
 }

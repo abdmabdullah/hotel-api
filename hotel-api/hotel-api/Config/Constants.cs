@@ -21,6 +21,9 @@
         public static readonly int INVALID_USER_CODE = 422;
 
         public static readonly string HOTEL_NOT_AVAILABLE_MESSAGE = "This hotel is not available for booking in this date range";
-        public static readonly int HOTEL_NOT_AVAILABLE_CODE = 422; 
+        public static readonly int HOTEL_NOT_AVAILABLE_CODE = 422;
+
+        public static readonly string INVALID_FILTER_ID_MESSAGE = "Invalid Filter Id";
+        public static readonly int INVALID_FILTER_ID_CODE = 422;
     }
 }

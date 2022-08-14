@@ -27,6 +27,23 @@ namespace hotel_api.Services
             }
         }
 
+        public ResponseModel SearchHotels(HotelSearchApiModel query)
+        {
+            try
+            {
+                List<HotelDetailsApiModel> hotels = _hotelRepository.SearchHotels(query);
+                return new ResponseModel(hotels, Constants.SUCCESS_MESSAGE, Constants.SUCCESS_CODE);
+            }
+            catch(KeyNotFoundException)
+            {
+                return new ResponseModel(null, Constants.NOT_FOUND_MESSAGE, Constants.NOT_FOUND_CODE);
+            }
+            catch(InvalidDataException)
+            {
+                return new ResponseModel(null, Constants.INVALID_FILTER_ID_MESSAGE, Constants.INVALID_FILTER_ID_CODE);
+            }
+        }
+
         public ResponseModel GetHotel(int id)
         {
             try
